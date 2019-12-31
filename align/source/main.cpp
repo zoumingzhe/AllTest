@@ -10,6 +10,8 @@ int main()
 	align2 a2;
 	align3 a3;
 	align4 a4;
+	align5 a5;
+	align6 a6;
 	align_store align_store;
 
 	cout << endl;
@@ -36,6 +38,18 @@ int main()
 	cout << "size a4.value1_i8\t: "  << sizeof(a4.value1_i8)  << endl;
 	cout << "size a4.value2_i8\t: "  << sizeof(a4.value2_i8)  << endl;
 	cout << "size a4.value3_i16\t: " << sizeof(a4.value3_i16) << endl;
+
+	cout << endl;
+	cout << "size a5\t: " << sizeof(a5) << endl;
+	cout << "size a5.value1_i8\t: "  << sizeof(a5.value1_i8)  << endl;
+	cout << "size a5.value2_i32\t: " << sizeof(a5.value2_i32) << endl;
+	cout << "size a5.value3_i16\t: " << sizeof(a5.value3_i16) << endl;
+
+	cout << endl;
+	cout << "size a6\t: " << sizeof(a6) << endl;
+	cout << "size a6.value1_i8\t: "  << sizeof(a6.value1_i8)  << endl;
+	cout << "size a6.value2_i16\t: " << sizeof(a6.value2_i16) << endl;
+	cout << "size a6.value3_i32\t: " << sizeof(a6.value3_i32) << endl;
 
 	cout << endl;
 	cout << "size align_store\t: " << sizeof(align_store) << endl;
