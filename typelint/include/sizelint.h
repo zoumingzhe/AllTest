@@ -1,10 +1,10 @@
-#
-#    > Author : ZouMingzhe <zoumingzhe@qq.com>
-#    > Created Time : 2020-01-11
-#    > References : 
-#    > https://blog.csdn.net/crazycoder8848/article/details/8292770
-#    > https://blog.csdn.net/qq_33658067/article/details/79563580
-#
+//
+//   > Author : ZouMingzhe <zoumingzhe@qq.com>
+//   > Created Time : 2020-01-11
+//   > References : 
+//   > https://blog.csdn.net/crazycoder8848/article/details/8292770
+//   > https://blog.csdn.net/qq_33658067/article/details/79563580
+//
 #ifndef _Z_SIZE_LINT_H_MZ_
 #define _Z_SIZE_LINT_H_MZ_
 
