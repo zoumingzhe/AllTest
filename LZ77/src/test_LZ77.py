@@ -3,9 +3,10 @@ from LZ77 import LZ77Compressor
 filename = "input.txt"
 compressor = LZ77Compressor(window_size=20) # window_size is optional
 
+#pack   = compressor.compress("..\\examples\\" + filename, verbose=False)
 pack   = compressor.compress("..\\examples\\" + filename, verbose=True)
 print(pack.tobytes())
-print(pack.count())
+print(pack.length())
 print(pack)
 
 filehandle = open("..\\examples\\compressed\\" + filename, "wb+");
