@@ -49,15 +49,13 @@ class LZ77Compressor:
 				# of the match 
 				(bestMatchDistance, bestMatchLength) = match
 
-				lc1 = output_buffer.count()
 				output_buffer.append(True)
-				output_buffer.fromstring(chr(bestMatchDistance >> 4))
-				output_buffer.fromstring(chr(((bestMatchDistance & 0xf) << 4) | bestMatchLength))
-				lc2 = output_buffer.count()
+				output_buffer.frombytes(int(bestMatchDistance >> 4).to_bytes(length=1, byteorder='big'))
+				output_buffer.frombytes(int(((bestMatchDistance & 0xf) << 4) | bestMatchLength).to_bytes(length=1, byteorder='big'))
 
-				print(lc1, output_buffer[-17:], lc2)
 				if verbose:
 					print("<1, %i, %i>" % (bestMatchDistance, bestMatchLength))
+				#print(output_buffer.length(), output_buffer[-25:])
 
 				i += bestMatchLength
 
@@ -68,6 +66,7 @@ class LZ77Compressor:
 				
 				if verbose:
 					print("<0, %s>" % data[i:i+1])
+				#print(output_buffer.length(), output_buffer[-17:])
 
 				i += 1
 
