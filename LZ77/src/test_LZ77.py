@@ -28,13 +28,14 @@ filetype = ".txt"
 filepath1 = "..\\examples\\" + filename + filetype
 filepath2 = "..\\examples\\compressed\\" + filename + "_window_" + str(window_size) + filetype
 filepath3 = "..\\examples\\decompressed\\" + filename + filetype
-compressor = LZ77Compressor(window_size) # window_size is optional
 
+compressor = LZ77Compressor(window_size) # window_size is optional
 filewrite(filepath2, compressor.compress(filepath1, verbose=False).tobytes())
 filewrite(filepath3, compressor.decompress(filepath2).tobytes())
 
 result = info(filepath1, filepath2)
-print(check(filepath1, filepath3), window_size, result['bytes1'], result['bytes2'],
+print(check(filepath1, filepath3), window_size,
+      result['bytes1'], result['bytes2'],
       result['bytes2'] / result['bytes1'] * 100)
 
 input("按回车（Enter）继续")
