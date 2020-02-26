@@ -118,15 +118,18 @@ class LZ77Compressor:
 				byte1 = ord(data[0:8].tobytes())
 				byte2 = ord(data[8:16].tobytes())
 
-				print(data[0:16])
+				#print(data[0:16])
 				del data[0:16]
 				distance = (byte1 << 4) | (byte2 >> 4)
 				length = (byte2 & 0xf)
-				print(distance, length)
+				#print(distance, length)
 
 				for i in range(length):
 					output_buffer.append(output_buffer[-distance])
-		out_data =  ''.join(output_buffer)
+
+		out_data = bitarray(endian='big')
+		for item in output_buffer:
+			out_data.frombytes(item)
 
 		if output_file_path:
 			try:
