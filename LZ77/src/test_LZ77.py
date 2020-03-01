@@ -2,14 +2,14 @@ import os
 import ztools
 from LZ77 import LZ77Compressor
 
-def ensure(path, name, type):
+def ensure(path, name):
    "确保文件夹存在"
    file = ztools.File()
-   file.ensure(path + "\\compressed", isCreate = True)
-   file.ensure(path + "\\decompressed", isCreate = True)
-   path1 = path + "\\" + name + type
-   path2 = path + "\\compressed\\" + name + "_window_" + str(window_size) + type
-   path3 = path + "\\decompressed\\" + name + type
+   file.ensure(path + "\\compressed")
+   file.ensure(path + "\\decompressed")
+   path1 = path + "\\" + name
+   path2 = path + "\\compressed\\" + "window_" + str(window_size) + "_" + name
+   path3 = path + "\\decompressed\\" + name
    return [path1,path2,path3]
 
 def filewrite(path, datas):
@@ -34,7 +34,7 @@ def info(path1, path2):
     return dict
 
 window_size = 100
-path1,path2,path3 = ensure("..\\examples", "input", ".txt")
+path1,path2,path3 = ensure("..\\examples", "input.txt")
 
 compressor = LZ77Compressor(window_size) # window_size is optional
 filewrite(path2, compressor.compress(path1, verbose=False).tobytes())
