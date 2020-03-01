@@ -1,5 +1,16 @@
 import os
+import ztools
 from LZ77 import LZ77Compressor
+
+def ensure(path, name, type):
+   "确保文件夹存在"
+   file = ztools.File()
+   file.ensure(path + "\\compressed", isCreate = True)
+   file.ensure(path + "\\decompressed", isCreate = True)
+   path1 = path + "\\" + name + type
+   path2 = path + "\\compressed\\" + name + "_window_" + str(window_size) + type
+   path3 = path + "\\decompressed\\" + name + type
+   return [path1,path2,path3]
 
 def filewrite(path, datas):
    "写入二进制文件"
@@ -23,18 +34,14 @@ def info(path1, path2):
     return dict
 
 window_size = 100
-filename = "input"
-filetype = ".txt"
-filepath1 = "..\\examples\\" + filename + filetype
-filepath2 = "..\\examples\\compressed\\" + filename + "_window_" + str(window_size) + filetype
-filepath3 = "..\\examples\\decompressed\\" + filename + filetype
+path1,path2,path3 = ensure("..\\examples", "input", ".txt")
 
 compressor = LZ77Compressor(window_size) # window_size is optional
-filewrite(filepath2, compressor.compress(filepath1, verbose=False).tobytes())
-filewrite(filepath3, compressor.decompress(filepath2).tobytes())
+filewrite(path2, compressor.compress(path1, verbose=False).tobytes())
+filewrite(path3, compressor.decompress(path2).tobytes())
 
-result = info(filepath1, filepath2)
-print(check(filepath1, filepath3), window_size,
+result = info(path1, path2)
+print(check(path1, path3), window_size,
       result['bytes1'], result['bytes2'],
       result['bytes2'] / result['bytes1'] * 100)
 
