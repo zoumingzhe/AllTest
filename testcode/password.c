@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+int main()
+{
+    int  idx;
+    int  len;
+    int  sum;
+    int  num[4];
+    char ch;
+    char password[1000];
+
+while(gets(password))
+{
+    idx = 0;
+    len = 0;
+    sum = 0;
+    num[0] = 0;
+    num[1] = 0;
+    num[2] = 0;
+    num[3] = 0;
+    // printf("%s %d ", password, idx);
+    while((ch = password[idx++]) != '\0')
+    {
+        // printf("%c", ch);
+        if (ch >= 'A' && ch <= 'Z') {
+            num[0]++;
+        } else if (ch >= 'a' && ch <= 'z')  {
+            num[1]++;
+        } else if (ch >= '0' && ch <= '9') {
+            num[2]++;
+        } else {
+            num[3]++;
+        }
+    }
+
+    len = idx - 1;
+    for (idx = 0; idx < 4; idx++)
+    {
+        if (num[idx] > 0) {
+            sum++;
+        }
+    }
+
+    // printf("%d,%d ", len, sum);
+    // printf("%d,%d,%d,%d,%d,%d ", len, sum, num[0], num[1], num[2], num[3]);
+    if (len >= 8 && sum >= 3) {
+        printf("OK\n");
+    }
+    else {
+        printf("NG\n");
+    }
+}
+
+    return 0;
+}
