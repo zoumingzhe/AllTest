@@ -3,12 +3,14 @@
 int main()
 {
     int  idx;
+    int  off;
     int  len;
     int  sum;
     int  num[4];
     char ch;
     char password[1000];
 
+retry:
 while(gets(password))
 {
     idx = 0;
@@ -44,6 +46,19 @@ while(gets(password))
     // printf("%d,%d ", len, sum);
     // printf("%d,%d,%d,%d,%d,%d ", len, sum, num[0], num[1], num[2], num[3]);
     if (len >= 8 && sum >= 3) {
+        for (idx = 0; idx < len-2; idx++) {
+            sum = 0;
+            for (off = idx+2; off < len; off++) {
+                if (password[idx+sum] == password[off]) {
+                    if (sum++ > 0) {
+                        printf("NG\n");
+                        goto retry;
+                    }
+                } else {
+                    sum = 0;
+                }
+            }
+        }
         printf("OK\n");
     }
     else {
