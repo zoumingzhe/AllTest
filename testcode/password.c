@@ -20,10 +20,8 @@ while(gets(password))
     num[1] = 0;
     num[2] = 0;
     num[3] = 0;
-    // printf("%s %d ", password, idx);
     while((ch = password[idx++]) != '\0')
     {
-        // printf("%c", ch);
         if (ch >= 'A' && ch <= 'Z') {
             num[0]++;
         } else if (ch >= 'a' && ch <= 'z')  {
@@ -43,14 +41,12 @@ while(gets(password))
         }
     }
 
-    // printf("%d,%d ", len, sum);
-    // printf("%d,%d,%d,%d,%d,%d ", len, sum, num[0], num[1], num[2], num[3]);
-    if (len >= 8 && sum >= 3) {
-        for (idx = 0; idx < len-2; idx++) {
+    if (len > 8 && sum >= 3) {
+        for (idx = 0; idx < len-1; idx++) {
             sum = 0;
-            for (off = idx+2; off < len; off++) {
+            for (off = idx+1; off < len; off++) {
                 if (password[idx+sum] == password[off]) {
-                    if (sum++ > 0) {
+                    if (sum++ > 1) {
                         printf("NG\n");
                         goto retry;
                     }
