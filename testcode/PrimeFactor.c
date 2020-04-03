@@ -1,3 +1,4 @@
+// https://www.nowcoder.com/practice/196534628ca6490ebce2e336b47b3607?tpId=37&tqId=21229&tPage=1&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking
 #include <stdio.h>
 
 int next_prime(int now)
