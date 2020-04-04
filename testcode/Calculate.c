@@ -71,6 +71,55 @@ int do_calc(int a, int b, int ch)
     }
 }
 
+void calc_low(stack *nums, stack *calcs)
+{
+    int c;
+    int n1, n2;
+
+    while (isempty(calcs) == 0)
+    {
+        pop(calcs, &c);
+        if (c == '(')
+            return;
+        pop(nums, &n2);
+        pop(nums, &n1);
+        if (isempty(calcs) == 0 && gettop(calcs) == '-')
+        {
+            if (c == '+')
+            {
+                n1 = do_calc(n1, n2, '-');
+            }
+            else
+            {
+                n1 = do_calc(n1, n2, '+');
+            }
+        }
+        else
+        {
+            n1 = do_calc(n1, n2, c);
+        }
+        push(nums, n1);
+    }
+}
+
+void calc_high(stack *nums, stack *calcs)
+{
+    int c;
+    int n1, n2;
+
+retryh:
+    c = gettop(calcs);
+    if (c == '*' || c == '/')
+    {
+        pop(calcs, &c);
+        pop(nums, &n2);
+        pop(nums, &n1);
+        n1 = do_calc(n1, n2, c);
+        push(nums, n1);
+        goto retryh;
+    }
+}
+
 int calc(char* str)
 {
     char ch;
@@ -108,18 +157,8 @@ int calc(char* str)
             push(&nums, val);
             val = 0;
             idx--;
-            // 计算高优先级
-        retry1:
-            c = gettop(&calcs);
-            if (c == '*' || c == '/')
-            {
-                pop(&nums, &n2);
-                pop(&nums, &n1);
-                pop(&calcs, &c);
-                n1 = do_calc(n1, n2, c);
-                push(&nums, n1);
-                goto retry1;
-            }
+            // 计算乘除法
+            calc_high(&nums, &calcs);
             break;
         case '{':
         case '[':
@@ -130,43 +169,10 @@ int calc(char* str)
         case '}':
         case ']':
         case ')':
-            // 出运算栈
-        retry2:
-            pop(&calcs, &c);
-            if (c != '(')
-            {
-                pop(&nums, &n2);
-                pop(&nums, &n1);
-                if (isempty(&calcs) == 0 && gettop(&calcs) == '-')
-                {
-                    if (c == '+')
-                    {
-                        n1 = do_calc(n1, n2, '-');
-                    }
-                    else
-                    {
-                        n1 = do_calc(n1, n2, '+');
-                    }
-                }
-                else
-                {
-                    n1 = do_calc(n1, n2, c);
-                }
-                push(&nums, n1);
-                goto retry2;
-            }
-            // 计算高优先级
-        retry3:
-            c = gettop(&calcs);
-            if (c == '*' || c == '/')
-            {
-                pop(&nums, &n2);
-                pop(&nums, &n1);
-                pop(&calcs, &c);
-                n1 = do_calc(n1, n2, c);
-                push(&nums, n1);
-                goto retry3;
-            }
+            // 计算加减法
+            calc_low(&nums, &calcs);
+            // 计算乘除法
+            calc_high(&nums, &calcs);
             break;
         case '+':
         case '-':
@@ -179,28 +185,7 @@ int calc(char* str)
     }
 
     // 计算加减法
-    while (isempty(&calcs) == 0)
-    {
-        pop(&nums, &n2);
-        pop(&nums, &n1);
-        pop(&calcs, &c);
-        if (isempty(&calcs) == 0 && gettop(&calcs) == '-')
-        {
-            if (c == '+')
-            {
-                n1 = do_calc(n1, n2, '-');
-            }
-            else
-            {
-                n1 = do_calc(n1, n2, '+');
-            }
-        }
-        else
-        {
-            n1 = do_calc(n1, n2, c);
-        }
-        push(&nums, n1);
-    }
+    calc_low(&nums, &calcs);
 
     pop(&nums, &n1);
     free(nums.base);
