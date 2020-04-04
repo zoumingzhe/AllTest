@@ -6,7 +6,6 @@ typedef struct
 {
     int* base;
     int* top;
-
 }stack;
 
 void push(stack* s, int e)
