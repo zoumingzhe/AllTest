@@ -13,6 +13,7 @@ int substring(char *str1, char *str2)
         }
         else
         {
+            idx1 -= idx2;
             idx2 = 0;
         }
         
