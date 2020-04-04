@@ -13,3 +13,4 @@
 [密码验证合格程序](./PasswordCheck.c)
 [数据分类](./DataClassification.c)
 [四则运算](./Calculate.c)
+[LISP运算](./LISP.c)
