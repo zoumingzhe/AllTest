@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
-    char typ;
-    unsigned int idx;
-    unsigned int val;
+    int   idx;
+    int   val;
     struct node* prev;
     struct node* next;
 }node;
@@ -19,11 +19,10 @@ int cmp_item(node* item1, node* item2)
         return 0;
 }
 
-node* make_item(char typ, unsigned int num, unsigned int idx)
+node* make_item(int val, int idx)
 {
     node* item = (node*)malloc(sizeof(node));
-    item->typ = typ;
-    item->val = num;
+    item->val = val;
     item->idx = idx;
     item->prev = 0;
     item->next = 0;
@@ -42,21 +41,11 @@ node* add_item(node* list, node* item)
     node* it;
 
     if (list != 0) {
-        if (cmp_item(item, list) < 0) {
-            insert_item(item, list);
-            list = item;
+        it = list;
+        while (it->next) {
+            it = it->next;
         }
-        else {
-            for (it = list; it != 0; it = it->next) {
-                if (it->next == 0 ||
-                    (cmp_item(item, it) > 0 &&
-                        cmp_item(item, it->next) < 0))
-                {
-                    insert_item(it, item);
-                    break;
-                }
-            }
-        }
+        insert_item(it, item);
     }
     else {
         list = item;
@@ -64,76 +53,135 @@ node* add_item(node* list, node* item)
     return list;
 }
 
-node* add_item_u(node* list, node* item)
+node* sub_item(node* list, node** item)
 {
     node* it;
+    node* max = list;
+    node* next;
+    node* prev;
 
-    if (list != 0) {
-        for (it = list; it != 0; it = it->next) {
-            if (cmp_item(item, it) == 0) {
-                break;
-            }
-            else if (cmp_item(item, it) > 0
-                || it->next == 0) {
-                insert_item(it, item);
-                break;
-            }
+    for (it = list; it != 0; it = it->next)
+    {
+        if (cmp_item(max, it) < 0)
+        {
+            max = it;
         }
     }
-    else {
-        list = item;
+
+    if (max == list)
+    {
+        *item = list;
+        list = (*item)->next;
+    }
+    else
+    {
+        *item = max;
+        next = max->next;
+        prev = max->prev;
+        prev->next = next;
+        if (next)
+        {
+            next->prev = prev;
+        }
+
+        if (list->next)
+        {
+            it = list;
+            while (it->next)
+            {
+                it = it->next;
+            }
+            it->next = list;
+            list->prev = it;
+            it = list->next;
+            list->next = NULL;
+            it->prev = NULL;
+            list = it;
+        }
     }
     return list;
 }
 
-node* get_list(char typ, char* str)
+void doo2(char* str)
 {
-    int off = 0;
+    node* list = 0;
+    node* item = 0;
+
+    list = add_item(list, make_item(9, 0));
+    list = add_item(list, make_item(2, 1));
+    list = add_item(list, make_item(9, 2));
+    list = add_item(list, make_item(5, 3));
+    list = add_item(list, make_item(2, 4));
+    list = add_item(list, make_item(2, 5));
+    list = add_item(list, make_item(9, 6));
+    list = add_item(list, make_item(5, 7));
+
+    while (list)
+    {
+        list = sub_item(list, &item);
+        printf("%d", item->idx);
+        if (list)
+            printf(", ");
+        free(item);
+    }
+    printf("\n");
+}
+
+int to_num(char* str, int* off)
+{
+    char ch;
     int val = 0;
     int idx = 0;
-    node* list = 0;
-    node* item;
 
-    while (str[off] != '\0') {
-        if (str[off] == ' ') {
-            item = make_item(typ, val, idx++);
-            list = add_item(list, item);
-            val = 0;
-        }
-        else {
-            val *= 10;
-            val += str[off] - '0';
-        }
-        off++;
+again:
+    ch = str[idx++] - '0';
+    if (ch >= 0 && ch <= 9)
+    {
+        val *= 10;
+        val += ch;
+        goto again;
     }
-    item = make_item(typ, val, idx++);
-    list = add_item(list, item);
-    return list;
+    *off = idx - 1;
+    return val;
 }
 
-int main(void)
+void doo(char* str)
 {
-    node* item;
-    node* listI;
-    node* listR;
-    char strI[1000];
-    char strR[1000];
+    node* list = 0;
+    node* item = 0;
+    int val = 0;
+    int num = 0;
+    int idx = 0;
+    int off = 0;
 
-    gets(strI);
-    gets(strR);
-
-    listI = get_list(1, strI);
-    listR = get_list(2, strR);
-
-    for (item = listI; item != 0; item = item->next)
+retry:
+    val = to_num(str + idx, &off);
+    list = add_item(list, make_item(val, num++));
+    idx += off;
+    if (str[idx] != '\0')
     {
-        printf("%d-%d\n", item->idx, item->val);
+        idx++;
+        idx++;
+        goto retry;
     }
 
-    for (item = listR; item != 0; item = item->next)
+    while (list)
     {
-        printf("%d-%d\n", item->idx, item->val);
+        list = sub_item(list, &item);
+        printf("%d", item->idx);
+        if (list)
+            printf(", ");
+        free(item);
     }
+    printf("\n");
+}
 
+int main() {
+    char str[1000];
+
+    while (gets(str))
+    {
+        doo(str);
+    }
     return 0;
 }
